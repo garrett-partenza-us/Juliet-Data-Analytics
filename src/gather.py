@@ -24,6 +24,8 @@ def main():
     gen = (f for f in os.listdir(p2p) if f.endswith('.pkl') and not f.startswith('.'))
     for filename in gen:
         opinfo, arrays = inspect_op(filename, opinfo, arrays)
+    plot(opinfo['vul'], opinfo['safe'], opinfo['names'], "opcode")
+
     
     #path to directory containing java files
     p2s = '/Users/garrettpartenza/Desktop/fall/expose_juliet/javafiles'
@@ -41,7 +43,6 @@ def main():
     print('plotting data...')
 
     #plot the means by calling plot function in helper.py
-    plot(opinfo['vul'], opinfo['safe'], opinfo['names'], "opcode")
     plot(sourceinfo['lines_vul'], sourceinfo['lines_safe'], sourceinfo['names'], "line")
     plot(sourceinfo['chars_vul'], sourceinfo['chars_safe'], sourceinfo['names'], "char")
     plot(sourceinfo['nodes_vul'], sourceinfo['nodes_safe'], sourceinfo['names'], "node")

@@ -96,8 +96,8 @@ def inspect_op(filename, opinfo, arrays):
     df = pd.read_pickle(p2p)
     
     #assign generatiors to data dictionary
-    data['vul'] = list(len(row[1]['Bytecode']) for row in df[df['Classification']==0].iterrows())
-    data['safe'] = list(len(row[1]['Bytecode']) for row in df[df['Classification']==1].iterrows())
+    data['vul'] = list(len(row[1]['Bytecode']) for row in df[df['Classification']==1].iterrows())
+    data['safe'] = list(len(row[1]['Bytecode']) for row in df[df['Classification']==0].iterrows())
 
 
     #update the arrays dataframe
@@ -124,12 +124,13 @@ def inspect_op(filename, opinfo, arrays):
 def plot(vmeans, smeans, names, mode):
     
     #create figure
+    plt.figure(figsize=(10,10))
     barWidth = 0.25
     r1 = np.arange(len(vmeans))
     r2 = [x + barWidth for x in r1]
-    plt.bar(r1, vmeans, color='b', width=barWidth, edgecolor='white', label='Vul')
-    plt.bar(r2, smeans, color='r', width=barWidth, edgecolor='white', label='Safe')
-    plt.xticks([r + barWidth for r in range(len(vmeans))], names)
+    plt.bar(r1, vmeans, color='c', width=barWidth, edgecolor='white', label='Vul')
+    plt.bar(r2, smeans, color='m', width=barWidth, edgecolor='white', label='Safe')
+    plt.xticks([r + barWidth for r in range(len(vmeans))], names, rotation=15, horizontalalignment='right', fontsize=7)
     plt.legend()
     
     #path to save the png figure
