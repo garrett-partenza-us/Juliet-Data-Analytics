@@ -10,6 +10,6 @@ for indx, row in df.iterrows():
 
     k = (stats.kruskal(row['Safe'], row['Vulnerable']))[1]
     p = stats.mannwhitneyu(row['Vulnerable'], row['Safe'])[1]
-    print(row['File'], k, p)
+    print(row['File'], "Kurskal: ", k, "Mann: ", p)
     
 

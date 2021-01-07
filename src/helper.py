@@ -12,7 +12,7 @@ from javaparser import *
     
 #function to inspect and gather stats on a directory full of java files
 def inspect_source(filename, sourceinfo, arrays):
-
+    print(filename.split('.')[0])
     #path to directory containing the directories of cwe java files
     p2j = '/Users/garrettpartenza/Desktop/fall/expose_juliet/javafiles/'
     
@@ -25,15 +25,15 @@ def inspect_source(filename, sourceinfo, arrays):
     for f in files if f.endswith("java") and f != "Main.java"
     for x in JavaClass(f,subdirs).__iter__()
     )
-    
+    count=0
     #iterate over method generator
     for method in gen:
-        
+        count+=1
         #create ast tree
+        
         tree = javalang.parser.Parser(javalang.tokenizer.tokenize(str(method))).parse_member_declaration()
-
         #if the method is vulnerable then update data dictionary with line, char, and node counts
-        if "bad" in method.tokens().split("(", 1)[0]:
+        if "bad" in method.tokens().split("{",1)[0]:
             data.update({
             'lv':data['lv']+[len(str(method).splitlines())],
             'cv':data['cv']+[len(str(method))],
@@ -41,16 +41,16 @@ def inspect_source(filename, sourceinfo, arrays):
             })
             
         #if the method is safe then update data dictionary with line, char, and node counts
-        elif "good" in method.tokens().split("(", 1)[0]:
+        elif "good" in method.tokens().split("{",1)[0] and "good ( )" not in method.tokens().split("{",1)[0]:
             data.update({
             'ls':data['ls']+[len(str(method).splitlines())],
             'cs':data['cs']+[len(str(method))],
             'ts':data['ts']+[len(list(tree))]
             })
-            
+    print(count)
     #update sourceinfo dictionary with means
     sourceinfo.update({
-    'names':sourceinfo['names']+[filename.split('.')[0]],
+    'names':sourceinfo['names']+[filename.split('_')[0]],
     'lines_vul':sourceinfo['lines_vul']+[statistics.mean(list(data['lv']))],
     'lines_safe':sourceinfo['lines_safe']+[statistics.mean(list(data['ls']))],
     'chars_safe':sourceinfo['chars_safe']+[statistics.mean(list(data['cs']))],
@@ -58,6 +58,7 @@ def inspect_source(filename, sourceinfo, arrays):
     'nodes_safe':sourceinfo['nodes_safe']+[statistics.mean(list(data['ts']))],
     'nodes_vul':sourceinfo['nodes_vul']+[statistics.mean(list(data['tv']))],
     })
+    
     
     #update arrays dataframe with line count
     arrays = arrays.append({
@@ -123,6 +124,9 @@ def inspect_op(filename, opinfo, arrays):
 #function plots two lists of vulnerable and nonvulnerable statistical means spread across different file names
 def plot(vmeans, smeans, names, mode):
     
+    print(names)
+    names = list(x[:7] for x in names)
+    print(names)
     #create figure
     plt.figure(figsize=(10,10))
     barWidth = 0.25

@@ -40,8 +40,10 @@ def main():
     for filename in gen:
         sourceinfo, arrays = inspect_source(filename, sourceinfo, arrays)
     
+    
     print('plotting data...')
 
+    
     #plot the means by calling plot function in helper.py
     plot(sourceinfo['lines_vul'], sourceinfo['lines_safe'], sourceinfo['names'], "line")
     plot(sourceinfo['chars_vul'], sourceinfo['chars_safe'], sourceinfo['names'], "char")
